@@ -3,10 +3,14 @@ import {App, Platform} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {GameSetup} from './pages/game-setup/game-setup';
 
+//providers
+import {GameField} from "./providers/game-field";
+
 
 @App({
     template: '<ion-nav [root]="rootPage"></ion-nav>',
-    config: {} // http://ionicframework.com/docs/v2/api/config/Config/
+    config: {}, // http://ionicframework.com/docs/v2/api/config/Config/
+    providers: [GameField]
 })
 export class MyApp {
     rootPage: any = GameSetup;

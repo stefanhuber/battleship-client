@@ -4,6 +4,15 @@
 
 <ion-content padding>
 
+    <div id="m-game" class="u-flexWrapper">
+        <div #elem [attr.class]="'m-game-cell u-flexBox '+cell" [attr.id]="'m-gc-'+i" [attr.data-id]="i"
+             *ngFor="#cell of computerGameField.cells; #i = index" (click)="shoot(elem)"></div>
+    </div>
 
+    <h2>Own Gamefield</h2>
+    <div id="m-ownGame" class="u-flexWrapper">
+        <div [attr.class]="'m-ownGame-cell u-flexBox '+ownCell" [attr.id]="'m-ogc-'+i"
+             *ngFor="#ownCell of ownGameField.cells; #i = index"></div>
+    </div>
 
 </ion-content>

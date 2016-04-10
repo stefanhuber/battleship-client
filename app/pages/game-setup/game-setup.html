@@ -4,8 +4,8 @@
 
 <ion-content padding>
 
-    <div id="game">
-        <div class="cell" [attr.id]="'cell-'+cell" *ngFor="#cell of cells"></div>
+    <div id="m-game" class="u-flexWrapper">
+        <div class="m-game-cell u-flexBox" [attr.id]="'m-game-cell-'+cell" *ngFor="#cell of cells"></div>
     </div>
 
     <button (click)="startGame()">Start Game</button>

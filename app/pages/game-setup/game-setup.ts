@@ -13,7 +13,6 @@ export class GameSetup {
     originY: number;
     cellSize: number;
     shipCount: number = 0;
-    itemMoved: boolean = false;
 
     constructor(private nav: NavController) {
         for ( let i = 0; i < 100; i++ ) {
@@ -23,16 +22,16 @@ export class GameSetup {
 
     initShip($game: HTMLElement, type: number) {
         let $ship = document.createElement('div');
-        $ship.className = 'ship ship-' + type;
+        $ship.className = 'm-game-ship m-game-ship-' + type;
 
         $ship.style.height = this.cellSize + 'px';
         $ship.style.width = (this.cellSize * type) + 'px';
         $ship.style.left = '0px';
         $ship.style.top = (this.cellSize * this.shipCount) + 'px';
-        $ship.style.transformOrigin = this.cellSize / 2 + 'px' + this.cellSize / 2 + 'px';
+        $ship.style.transformOrigin = this.cellSize / 2 + 'px ' + this.cellSize / 2 + 'px';
 
         $ship.setAttribute('data-type', type.toString());
-        $ship.setAttribute('data-x', 0);
+        $ship.setAttribute('data-x', "0");
         $ship.setAttribute('data-y', this.shipCount.toString());
 
         $ship.addEventListener('touchstart', () => {
@@ -48,15 +47,27 @@ export class GameSetup {
 
         });
 
-
         $game.appendChild($ship);
         this.shipCount++;
     }
 
+    /**
+     * starts a new Game
+     *  - loads all ships in ships object
+     *  - ship contains type (eg 2, 3), orientation (eg horizontal), position (x, y)
+     */
     startGame() {
 
-        let $shipElements = document.getElementsByClassName('ship');
-        let ships = [];
+        let $shipElements = document.getElementsByClassName('m-game-ship');
+        let ownShips = [];
+        let computerShips = [];
+        let ship1 = {
+            orientation: 'horizontal',
+            type: 4,
+            x: 3,
+            y: 6
+        };
+        computerShips.push(ship1);
 
         for ( let i = 0; i < $shipElements.length; i++ ) {
             let $shipElement = $shipElements.item(i);
@@ -67,38 +78,37 @@ export class GameSetup {
                 y: parseInt($shipElement.getAttribute('data-y'))
             };
 
-            // console.log("X: " + $shipElement.getBoundingClientRect().left / this.cellSize);
-            // console.log("Y: " + $shipElement.getBoundingClientRect().top / this.cellSize);
-
-            ships.push(ship);
+            ownShips.push(ship);
         }
 
+        //TODO: generate computer ships here
         this.nav.push(GamePlay, {
-            ships: ships
+            ownShips: ownShips,
+            computerShips: computerShips
         });
     }
 
 
     ngAfterContentInit() {
 
-        let $game = document.getElementById('game');
+        let $game = document.getElementById('m-game');
         $game.style.height = $game.clientWidth + 'px';
 
         this.cellSize = $game.clientWidth / 10;
         this.originX = $game.getClientRects()[0].left;
         this.originY = $game.getClientRects()[0].top;
 
-        let z = 4;
-        for ( let i = 2; i <= 5; i++ ) {
+        let numberOfShips = 4;
+        for ( let shipLength = 2; shipLength <= 5; shipLength++ ) {
             let j = 0;
-            while ( j < z ) {
-                this.initShip($game, i);
+            while ( j < numberOfShips ) {
+                this.initShip($game, shipLength);
                 j++;
             }
-            z--;
+            numberOfShips--;
         }
 
-        interact('.ship')
+        interact('.m-game-ship')
             .draggable({
                 snap: {
                     targets: [
@@ -116,6 +126,10 @@ export class GameSetup {
                     event.target.setAttribute('data-move', true);
                     event.target.style.left = (event.pageX - this.originX) + 'px';
                     event.target.style.top = (event.pageY - this.originY) + 'px';
+                },
+                restrict: {
+                    drag: "parent",
+                    elementRect: {top: 0, left: 0, bottom: 1, right: 1}
                 }
             });
     }

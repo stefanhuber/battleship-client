@@ -1,4 +1,5 @@
 import {Page, NavParams} from 'ionic-angular';
+import {GameField} from "../../providers/game-field";
 
 
 @Page({
@@ -6,7 +7,44 @@ import {Page, NavParams} from 'ionic-angular';
 })
 export class GamePlay {
 
+    computerGameField: GameField;
+    ownGameField: GameField;
+    currentComputerShot = 1;
+
     constructor(private params: NavParams) {
-        console.log(params);
+        //create own game field
+        this.ownGameField = new GameField(params.get('ownShips'));
+
+        //create computer game field
+        this.computerGameField = new GameField(params.get('computerShips'));
+
+    }
+
+    shoot(elem) {
+        let id = elem.getAttribute('data-id');
+        if(!this.computerGameField.shoot(id)) {
+            return;
+        }
+        
+        this.computerGameField.checkWinner();
+
+        //TODO after currentComputerShot = 99
+        this.ownGameField.shoot(this.currentComputerShot);
+        this.currentComputerShot = this.increaseComputerShot();
+    }
+
+    increaseComputerShot() {
+        let nextComputerShot = this.currentComputerShot += 1;
+
+        if (nextComputerShot % 10 == 0) {
+            return nextComputerShot
+        } else if ((nextComputerShot % 10 ) % 2 == 1 && nextComputerShot % 10 == 9) {
+            nextComputerShot += 2;
+        } else {
+            nextComputerShot++;
+        }
+
+        return nextComputerShot;
+
     }
 }

@@ -1,0 +1,11 @@
+.u-flexWrapper {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.u-flexBox {
+    flex-basis: 10%;
+    border: 1px solid #666;
+    height: 10%;
+}

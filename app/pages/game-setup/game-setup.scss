@@ -1,20 +1,12 @@
-#game {
-    position: relative;
+#m-game {
     width: 100%;
-    display: flex;
     height: 50%;
-    flex-wrap: wrap;
-
-    .cell {
-        flex-basis: 10%;
-        border: 1px solid #666;
-        height: 10%;
-    }
+    background: blue;
 }
 
-.ship {
+.m-game-ship {
     border: 1px solid #ccc;
-    background: cornflowerblue;
+    background: darkgray;
     position: absolute;
 
     &.rotate {

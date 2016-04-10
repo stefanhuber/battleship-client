@@ -1,0 +1,32 @@
+#m-game {
+    width: 100%;
+    height: 50%;
+}
+
+.m-game-ship {
+    border: 1px solid #ccc;
+    background: darkgray;
+    position: absolute;
+
+    &.rotate {
+        transform: rotate(90deg);
+    }
+}
+
+#m-ownGame {
+    width: 50%;
+    height: 25%;
+}
+
+.is-ship {
+    background: darkgray;
+}
+.is-empty {
+    background: blue;
+}
+.is-hit {
+    background: darkred;
+}
+.is-missed {
+    background: white;
+}
