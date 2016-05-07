@@ -13,10 +13,11 @@ export class GamePlay {
 
     constructor(private params: NavParams) {
         //create own game field
-        this.ownGameField = new GameField(params.get('ownShips'));
+        this.ownGameField = params.get('ownGameField');
 
         //create computer game field
-        this.computerGameField = new GameField(params.get('computerShips'));
+        this.computerGameField = params.get('computerGameField');
+        console.log(params);
 
     }
 
@@ -37,7 +38,7 @@ export class GamePlay {
         let nextComputerShot = this.currentComputerShot += 1;
 
         if (nextComputerShot % 10 == 0) {
-            return nextComputerShot
+            return nextComputerShot;
         } else if ((nextComputerShot % 10 ) % 2 == 1 && nextComputerShot % 10 == 9) {
             nextComputerShot += 2;
         } else {

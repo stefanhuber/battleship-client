@@ -239,6 +239,7 @@ declare namespace Interact {
         styleCursor(): boolean;
         styleCursor(newValue: boolean): InteractStatic;
         supportsTouch(): boolean
+        createSnapGrid(param: {x; y; offset}): any;
     }
 }
 

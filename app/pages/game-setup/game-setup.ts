@@ -1,6 +1,8 @@
 import {Page, NavController} from 'ionic-angular';
 import * as interact from 'interact.js';
 import {GamePlay} from "../game-play/game-play";
+import {Ship} from "../../providers/ship";
+import {GameField} from "../../providers/game-field";
 
 
 @Page({
@@ -13,6 +15,7 @@ export class GameSetup {
     originY: number;
     cellSize: number;
     shipCount: number = 0;
+    computerGameField: GameField;
 
     constructor(private nav: NavController) {
         for ( let i = 0; i < 100; i++ ) {
@@ -60,32 +63,51 @@ export class GameSetup {
 
         let $shipElements = document.getElementsByClassName('m-game-ship');
         let ownShips = [];
-        let computerShips = [];
-        let ship1 = {
-            orientation: 'horizontal',
-            type: 4,
-            x: 3,
-            y: 6
-        };
-        computerShips.push(ship1);
 
         for ( let i = 0; i < $shipElements.length; i++ ) {
             let $shipElement = $shipElements.item(i);
-            let ship = {
-                orientation: $shipElement.classList.contains('rotate') ? 'vertical' : 'horizontal',
-                type: $shipElement.getAttribute('data-type'),
-                x: parseInt($shipElement.getAttribute('data-x')),
-                y: parseInt($shipElement.getAttribute('data-y'))
-            };
+            let ship = new Ship(
+                $shipElement.getAttribute('data-type'),
+                $shipElement.classList.contains('rotate') ? 'vertical' : 'horizontal',
+                parseInt($shipElement.getAttribute('data-x')),
+                parseInt($shipElement.getAttribute('data-y'))
+            );
 
             ownShips.push(ship);
         }
 
-        //TODO: generate computer ships here
+        this.generateComputerShips();
+
         this.nav.push(GamePlay, {
-            ownShips: ownShips,
-            computerShips: computerShips
+            ownGameField: new GameField(ownShips),
+            computerGameField: this.computerGameField
         });
+    }
+
+    generateComputerShips() {
+        this.computerGameField = new GameField([]);
+
+        let numberOfShips = 1;
+        let numOfShip = 0;
+        for ( let shipLength = 5; shipLength >= 2; shipLength-- ) {
+            let j = 0;
+            while ( j < numberOfShips ) {
+
+                // let ship = new Ship(shipLength);
+                // while ( this.computerGameField.addShip(ship) === false ) {
+                //     ship = new Ship(shipLength);
+                // }
+
+                do {
+                    var ship = new Ship(shipLength);
+                } while ( this.computerGameField.addShip(ship) === false );
+
+                j++;
+                numOfShip++;
+            }
+            numberOfShips++;
+        }
+
     }
 
 
