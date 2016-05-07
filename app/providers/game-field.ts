@@ -35,8 +35,7 @@ export class GameField {
             } else {
                 elem = ship.x + i;
             }
-            //TODO: stuff
-            if (this._gameFieldContainsShips(elem)) {
+            if (this._cellContainsShip(elem)) {
                 return false;
             }
         }
@@ -83,17 +82,22 @@ export class GameField {
         }
     }
 
-    checkWinner() {
-        let self = this;
+    checkWinner(): boolean {
         if (this.cells.find((e) => this._gameFieldContainsShips(e))) {
-
+            return false;
         } else {
             console.log('winner found');
+            return true;
         }
     }
 
+
     _gameFieldContainsShips(elem) {
-        return this.cells[elem].indexOf(this.HAS_SHIP) > -1;
+        return elem.indexOf(this.HAS_SHIP) > -1;
+    }
+
+    _cellContainsShip(cellIndex) {
+        return this.cells[cellIndex].indexOf(this.HAS_SHIP) > -1;
     }
 
 }

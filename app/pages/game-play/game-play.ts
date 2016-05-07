@@ -1,5 +1,6 @@
-import {Page, NavParams} from 'ionic-angular';
+import {Page, NavParams, NavController} from 'ionic-angular';
 import {GameField} from "../../providers/game-field";
+import {GameWinner} from "../game-winner/game-winner";
 
 
 @Page({
@@ -11,14 +12,12 @@ export class GamePlay {
     ownGameField: GameField;
     currentComputerShot = 1;
 
-    constructor(private params: NavParams) {
+    constructor(private params: NavParams, private nav: NavController) {
         //create own game field
         this.ownGameField = params.get('ownGameField');
 
         //create computer game field
         this.computerGameField = params.get('computerGameField');
-        console.log(params);
-
     }
 
     shoot(elem) {
@@ -27,10 +26,21 @@ export class GamePlay {
             return;
         }
         
-        this.computerGameField.checkWinner();
+        
+        if(this.computerGameField.checkWinner()) {
+            this.nav.push(GameWinner, {
+                winner: 'Spieler'
+            });
+        }
 
         //TODO after currentComputerShot = 99
         this.ownGameField.shoot(this.currentComputerShot);
+        if(this.ownGameField.checkWinner()) {
+            this.nav.push(GameWinner, {
+                winner: 'Computer'
+            });
+        }
+
         this.currentComputerShot = this.increaseComputerShot();
     }
 
