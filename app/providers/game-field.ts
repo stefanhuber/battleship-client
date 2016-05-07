@@ -31,9 +31,9 @@ export class GameField {
         for ( let i = 0; i < ship.type; i++ ) {
 
             if (ship.orientation == ship.VERTICAL) {
-                elem = ship.x + ship.y * 10;
+                elem = ship.x + (10 * i) + 10 * ship.y;
             } else {
-                elem = ship.x + i;
+                elem = ship.x + i + 10 * ship.y;
             }
             if (this._cellContainsShip(elem)) {
                 return false;
