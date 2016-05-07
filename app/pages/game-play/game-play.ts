@@ -10,7 +10,8 @@ export class GamePlay {
 
     computerGameField: GameField;
     ownGameField: GameField;
-    currentComputerShot = 1;
+    currentComputerShot: number = 1;
+    numOfComputerShots: number = 0;
 
     constructor(private params: NavParams, private nav: NavController) {
         //create own game field
@@ -22,29 +23,37 @@ export class GamePlay {
 
     shoot(elem) {
         let id = elem.getAttribute('data-id');
-        if(!this.computerGameField.shoot(id)) {
+        if (!this.computerGameField.shoot(id)) {
             return;
         }
-        
-        
-        if(this.computerGameField.checkWinner()) {
+
+
+        if (this.computerGameField.checkWinner()) {
             this.nav.push(GameWinner, {
                 winner: 'Spieler'
             });
         }
+        
+        if (this.numOfComputerShots + 1 > this.ownGameField.cells.length / 2) {
+            while ( !this.ownGameField.shoot(this._randomComputerShot()) ) {
+            }
+        } else {
+            this.ownGameField.shoot(this.currentComputerShot);
+            this.currentComputerShot = this._increaseComputerShot();
+        }
 
-        //TODO after currentComputerShot = 99
-        this.ownGameField.shoot(this.currentComputerShot);
-        if(this.ownGameField.checkWinner()) {
+        this.numOfComputerShots++;
+
+        if (this.ownGameField.checkWinner()) {
             this.nav.push(GameWinner, {
                 winner: 'Computer'
             });
         }
 
-        this.currentComputerShot = this.increaseComputerShot();
+
     }
 
-    increaseComputerShot() {
+    _increaseComputerShot() {
         let nextComputerShot = this.currentComputerShot += 1;
 
         if (nextComputerShot % 10 == 0) {
@@ -56,6 +65,13 @@ export class GamePlay {
         }
 
         return nextComputerShot;
+    }
 
+    _randomComputerShot(): number {
+        return this.getRandom(0, 99);
+    }
+
+    getRandom(min, max): number {
+        return Math.floor(Math.random() * (max - min + 1) + min);
     }
 }

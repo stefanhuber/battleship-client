@@ -69,7 +69,7 @@ export class GameField {
 
     shoot(fieldNummer: number): boolean {
         if (fieldNummer >= this.cells.length) {
-            return;
+            return false;
         }
         if (this.cells[fieldNummer] == this.HAS_SHIP) {
             this.cells[fieldNummer] = this.IS_HIT;
