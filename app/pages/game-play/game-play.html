@@ -9,7 +9,7 @@
              *ngFor="#cell of computerGameField.cells; #i = index" (click)="shoot(elem)"></div>
     </div>
 
-    <h2>Own Gamefield</h2>
+    <h2>Own Gamefield <span *ngIf="isTurn">X</span></h2>
     <div id="m-ownGame" class="u-flexWrapper">
         <div [attr.class]="'m-ownGame-cell u-flexBox '+ownCell" [attr.id]="'m-ogc-'+i"
              *ngFor="#ownCell of ownGameField.cells; #i = index"></div>

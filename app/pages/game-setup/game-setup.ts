@@ -1,9 +1,10 @@
 import {Page, NavController} from 'ionic-angular';
 import * as interact from 'interact.js';
+import {Game2Play} from "../game-2-play/game-2-play";
 import {GamePlay} from "../game-play/game-play";
 import {Ship} from "../../providers/ship";
 import {GameField} from "../../providers/game-field";
-
+import * as io from 'socket.io-client';
 
 @Page({
     templateUrl: 'build/pages/game-setup/game-setup.html',
@@ -15,12 +16,31 @@ export class GameSetup {
     originY: number;
     cellSize: number;
     shipCount: number = 0;
-    computerGameField: GameField;
-
+    
     constructor(private nav: NavController) {
         for ( let i = 0; i < 100; i++ ) {
             this.cells.push(i);
-        }
+        }        
+    }
+    
+    start2Game() {
+        let socket = io('http://192.168.23.100:8085');
+        
+        socket.on('session', message => {
+            if (message.p1 === socket.id) {
+                this.nav.push(Game2Play, {
+                    player : 1 ,
+                    sessionId : message.sessionId ,
+                    gameField : this.getOwnGameField()
+                });
+            } else if (message.p2 === socket.id) {
+                this.nav.push(Game2Play, {
+                    player : 2 ,
+                    sessionId : message.sessionId ,
+                    gameField : this.getOwnGameField()
+                });
+            }            
+        });
     }
 
     initShip($game: HTMLElement, type: number) {
@@ -53,14 +73,8 @@ export class GameSetup {
         $game.appendChild($ship);
         this.shipCount++;
     }
-
-    /**
-     * starts a new Game
-     *  - loads all ships in ships object
-     *  - ship contains type (eg 2, 3), orientation (eg horizontal), position (x, y)
-     */
-    startGame() {
-
+    
+    getOwnGameField() : GameField {
         let $shipElements = document.getElementsByClassName('m-game-ship');
         let ownShips = [];
 
@@ -75,17 +89,24 @@ export class GameSetup {
 
             ownShips.push(ship);
         }
+        
+        return new GameField(ownShips);
+    } 
 
-        this.generateComputerShips();
-
+    /**
+     * starts a new Game
+     *  - loads all ships in ships object
+     *  - ship contains type (eg 2, 3), orientation (eg horizontal), position (x, y)
+     */
+    startGame() {
         this.nav.push(GamePlay, {
-            ownGameField: new GameField(ownShips),
-            computerGameField: this.computerGameField
+            ownGameField: this.getOwnGameField(),
+            computerGameField: this.generateComputerShips()
         });
     }
 
-    generateComputerShips() {
-        this.computerGameField = new GameField([]);
+    generateComputerShips() : GameField {
+        let computerGameField = new GameField([]);
 
         let numberOfShips = 1;
         let numOfShip = 0;
@@ -95,14 +116,15 @@ export class GameSetup {
 
                 do {
                     var ship = new Ship(shipLength);
-                } while ( this.computerGameField.addShip(ship) === false );
+                } while ( computerGameField.addShip(ship) === false );
 
                 j++;
                 numOfShip++;
             }
             numberOfShips++;
         }
-
+        
+        return computerGameField;
     }
 
 
