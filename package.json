@@ -14,12 +14,14 @@
     "devDependencies": {
         "del": "2.2.0",
         "gulp": "3.9.1",
+        "gulp-sass": "2.2.0",
         "gulp-watch": "4.3.5",
         "ionic-gulp-browserify-typescript": "^1.0.0",
         "ionic-gulp-fonts-copy": "^1.0.0",
         "ionic-gulp-html-copy": "^1.0.0",
         "ionic-gulp-sass-build": "^1.0.0",
-        "ionic-gulp-scripts-copy": "^1.0.0"
+        "ionic-gulp-scripts-copy": "^1.0.0",
+        "node-sass": "3.4.2"
     },
     "cordovaPlugins": [
         "cordova-plugin-device",

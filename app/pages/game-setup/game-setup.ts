@@ -93,11 +93,6 @@ export class GameSetup {
             let j = 0;
             while ( j < numberOfShips ) {
 
-                // let ship = new Ship(shipLength);
-                // while ( this.computerGameField.addShip(ship) === false ) {
-                //     ship = new Ship(shipLength);
-                // }
-
                 do {
                     var ship = new Ship(shipLength);
                 } while ( this.computerGameField.addShip(ship) === false );
